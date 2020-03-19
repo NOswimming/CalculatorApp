@@ -1,4 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { Tile } from './Tile';
+import {
+  Command,
+  CommandInputNumber,
+  CommandInputOperator,
+  CommandInputDecimalPoint,
+  CommandInputPlusMinus,
+  CommandInputClearEntry,
+  CommandInputClear,
+  CommandInputBackspace
+} from './Command';
+import { CalculatorConstants } from './CalculatorConstants';
 
 @Component({
   selector: 'app-calculator',
@@ -35,6 +47,7 @@ export class CalculatorComponent implements OnInit {
   calculation: string;
   input: string;
   currentTotal: number;
+  currentOperator: string;
 
   inputDisplay: 'input' | 'currentTotal' = 'input';
 
@@ -72,7 +85,7 @@ export class CalculatorComponent implements OnInit {
   }
 
   buttonClick(label: string) {
-    console.log(label);
+    console.trace({ label });
     // Get button matching label
     const button = this.buttonCommands[label];
     if (button) {
@@ -84,6 +97,7 @@ export class CalculatorComponent implements OnInit {
     this.resetInput();
     this.calculation = '';
     this.currentTotal = 0;
+    this.currentOperator = '';
   }
 
   resetInput(): string {
@@ -112,118 +126,32 @@ export class CalculatorComponent implements OnInit {
     return this.calculation;
   }
 
-  performCalculation(calculation: string): number {
+  setCurrentOperator(operator: string) {
+    this.currentOperator = operator;
+  }
+
+  performCalculation(): number {
+    // If there is no current operator then cannot perform calculation
+    if (!this.currentOperator) {
+      this.currentTotal = +this.input;
+      return this.currentTotal;
+    }
+    // If the current operator is equals then do not do the calculation and reset the diplay
+    if (this.currentOperator === '=') {
+      this.calculation = '';
+      if (this.input === '0') {
+        this.input = this.currentTotal + '';
+      } else {
+        this.currentTotal = +this.input;
+      }
+      return this.currentTotal;
+    }
+
+    const calculation = this.currentTotal + this.currentOperator + this.input;
+    console.trace({ calculation });
     this.currentTotal = eval(calculation);
     this.inputDisplay = 'currentTotal';
     return this.currentTotal;
   }
 
-}
-
-export interface Tile {
-  color: string;
-  cols: number;
-  rows: number;
-  label: string;
-}
-
-export interface Command {
-  pressButton(calculatorComponent: CalculatorComponent): void;
-}
-
-export class CommandInputNumber implements Command {
-  value: number;
-
-  constructor(value: number) {
-    this.value = value;
-  }
-
-  pressButton(calc: CalculatorComponent): void {
-    calc.appendInput('' + this.value);
-  }
-}
-
-export class CommandInputDecimalPoint implements Command {
-  pressButton(calc: CalculatorComponent): void {
-    calc.appendInput('.');
-  }
-}
-
-export class CommandInputPlusMinus implements Command {
-  pressButton(calc: CalculatorComponent): void {
-    if (calc.input.startsWith('-')) {
-      calc.input = calc.input.substring(1);
-    } else {
-      calc.input = '-' + calc.input;
-    }
-  }
-}
-
-export class CommandInputOperator implements Command {
-  label: string;
-
-  pressButton(calc: CalculatorComponent): void {
-    // Move input number to calculation string.
-    calc.appendCalculation(calc.input);
-    // Perform calculation
-    calc.performCalculation(calc.calculation);
-    // Append operator
-    calc.appendCalculation(this.label);
-    // Reset input
-    calc.resetInput();
-  }
-
-  constructor(label: string) {
-    this.label = label;
-  }
-}
-
-export class CommandInputBackspace implements Command {
-  pressButton(calc: CalculatorComponent): void {
-    if (calc.input.length > 1) {
-      calc.input = calc.input.substring(0, calc.input.length - 1);
-    } else {
-      calc.resetInput();
-    }
-
-  }
-}
-
-export class CommandInputClear implements Command {
-  pressButton(calc: CalculatorComponent): void {
-    calc.reset();
-  }
-}
-
-export class CommandInputClearEntry implements Command {
-  pressButton(calc: CalculatorComponent): void {
-    calc.resetInput();
-  }
-}
-
-export class CalculatorConstants {
-  // Numbers
-  public static readonly BUTTON_ONE_LABEL: string = '1';
-  public static readonly BUTTON_TWO_LABEL: string = '2';
-  public static readonly BUTTON_THREE_LABEL: string = '3';
-  public static readonly BUTTON_FOUR_LABEL: string = '4';
-  public static readonly BUTTON_FIVE_LABEL: string = '5';
-  public static readonly BUTTON_SIX_LABEL: string = '6';
-  public static readonly BUTTON_SEVEN_LABEL: string = '7';
-  public static readonly BUTTON_EIGHT_LABEL: string = '8';
-  public static readonly BUTTON_NINE_LABEL: string = '9';
-  public static readonly BUTTON_ZERO_LABEL: string = '0';
-  // Commutive Operators
-  public static readonly BUTTON_ADD_LABEL: string = '+';
-  public static readonly BUTTON_SUBTRACT_LABEL: string = '-';
-  public static readonly BUTTON_MULTIPLY_LABEL: string = '*';
-  public static readonly BUTTON_DIVIDE_LABEL: string = '/';
-  // Non-commutive Operators
-  public static readonly BUTTON_EQUALS_LABEL: string = '=';
-  public static readonly BUTTON_DECIMAL_POINT_LABEL: string = '.';
-  public static readonly BUTTON_PLUS_MINUS_LABEL: string = '+/-';
-
-  public static readonly BUTTON_CLEAR_ENTRY_LABEL: string = 'CE';
-  public static readonly BUTTON_CLEAR_LABEL: string = 'C';
-  public static readonly BUTTON_BACKSPACE_LABEL: string = '<-';
 }
