@@ -1,6 +1,6 @@
 <p>calculator works!</p>
-
-<mat-grid-list cols="4" rowHeight="100px">
+<mat-card class="calculator-card">
+  <mat-grid-list cols="4" rowHeight="100px">
     <mat-grid-tile
         *ngFor="let tile of tiles"
         [colspan]="tile.cols"
@@ -9,3 +9,4 @@
       {{tile.text}}
     </mat-grid-tile>
   </mat-grid-list>
+</mat-card>

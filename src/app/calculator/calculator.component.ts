@@ -13,10 +13,26 @@ export class CalculatorComponent implements OnInit {
   }
 
   tiles: Tile[] = [
-    {text: 'One', cols: 1, rows: 1, color: 'lightblue'},
-    {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},
-    {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
-    {text: 'Four', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: 'CE', cols: 1, rows: 1, color: 'lightgreen'},
+    {text: 'C', cols: 1, rows: 1, color: 'lightpink'},
+    {text: '<-', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '/', cols: 1, rows: 1, color: 'lightblue'},
+    {text: '7', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '8', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '9', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '*', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '4', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '5', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '6', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '-', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '1', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '2', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '3', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '+', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '+/-', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '0', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '.', cols: 1, rows: 1, color: '#DDBDF1'},
+    {text: '=', cols: 1, rows: 1, color: '#DDBDF1'},
   ];
 
 }
