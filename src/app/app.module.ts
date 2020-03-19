@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalculatorComponent } from './calculator/calculator.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatGridListModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
