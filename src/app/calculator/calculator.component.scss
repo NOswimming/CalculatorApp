@@ -3,7 +3,21 @@
         width: 256px;
     }
 
+    &-display {
+        &-input {
+            font-size: x-large;
+            text-align: right;
+        }
+        &-calculation {
+            font-size: larger;
+            text-align: right;
+            min-height: 20px;
+        }
+    }
+    
+
     &-button {
         height: 100%;
+        font-size: larger;
     }
 }

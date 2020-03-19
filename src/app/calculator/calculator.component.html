@@ -1,7 +1,7 @@
 <mat-card class="calculator-card">
-  <p>{{calculation}}</p>
-  <p>{{inputDisplay === 'input' ? input : currentTotal  }}</p>
-  <mat-grid-list cols="4" rowHeight="80px">
+  <p class="calculator-display-calculation truncate">{{calculation}}</p>
+  <p class="calculator-display-input truncate">{{inputDisplay === 'input' ? input : currentTotal  }}</p>
+  <mat-grid-list cols="4" rowHeight="64px">
     <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows">
       <button (click)="buttonClick(tile.label)" mat-flat-button color="{{tile.color}}" class="calculator-button">{{tile.label}}</button>
     </mat-grid-tile>
