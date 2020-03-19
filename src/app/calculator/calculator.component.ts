@@ -11,6 +11,7 @@ import {
   CommandInputBackspace
 } from './Command';
 import { CalculatorConstants } from './CalculatorConstants';
+import { CalculatorService } from './calculator.service';
 
 @Component({
   selector: 'app-calculator',
@@ -19,29 +20,7 @@ import { CalculatorConstants } from './CalculatorConstants';
 })
 export class CalculatorComponent implements OnInit {
 
-  tiles: Tile[] = [
-    { label: CalculatorConstants.BUTTON_CLEAR_ENTRY_LABEL, cols: 1, rows: 1, color: 'warn' },
-    { label: CalculatorConstants.BUTTON_CLEAR_LABEL, cols: 1, rows: 1, color: 'warn' },
-    { label: CalculatorConstants.BUTTON_BACKSPACE_LABEL, cols: 1, rows: 1, color: 'warn' },
-    { label: CalculatorConstants.BUTTON_DIVIDE_LABEL, cols: 1, rows: 1, color: 'accent' },
-    { label: CalculatorConstants.BUTTON_SEVEN_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_EIGHT_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_NINE_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_MULTIPLY_LABEL, cols: 1, rows: 1, color: 'accent' },
-    { label: CalculatorConstants.BUTTON_FOUR_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_FIVE_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_SIX_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_SUBTRACT_LABEL, cols: 1, rows: 1, color: 'accent' },
-    { label: CalculatorConstants.BUTTON_ONE_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_TWO_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_THREE_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_ADD_LABEL, cols: 1, rows: 1, color: 'accent' },
-    { label: CalculatorConstants.BUTTON_PLUS_MINUS_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_ZERO_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_DECIMAL_POINT_LABEL, cols: 1, rows: 1, color: '' },
-    { label: CalculatorConstants.BUTTON_EQUALS_LABEL, cols: 1, rows: 1, color: 'primary' },
-  ];
-
+  tiles: Tile[] = [];
   buttonCommands: { [id: string]: Command; } = {};
 
   calculation: string;
@@ -51,13 +30,18 @@ export class CalculatorComponent implements OnInit {
 
   inputDisplay: 'input' | 'currentTotal' = 'input';
 
-  constructor() { }
+  constructor(private calcultorService: CalculatorService) { }
 
   ngOnInit(): void {
     // reset the state
     this.reset();
-
     // Add all the button commands
+    this.setupButtonCommands();
+    // Create layout
+    this.setupGridListTileLayout();
+  }
+
+  setupButtonCommands() {
     // Numbers
     this.buttonCommands[CalculatorConstants.BUTTON_ONE_LABEL] = new CommandInputNumber(1);
     this.buttonCommands[CalculatorConstants.BUTTON_TWO_LABEL] = new CommandInputNumber(2);
@@ -81,7 +65,31 @@ export class CalculatorComponent implements OnInit {
     this.buttonCommands[CalculatorConstants.BUTTON_CLEAR_ENTRY_LABEL] = new CommandInputClearEntry();
     this.buttonCommands[CalculatorConstants.BUTTON_CLEAR_LABEL] = new CommandInputClear();
     this.buttonCommands[CalculatorConstants.BUTTON_BACKSPACE_LABEL] = new CommandInputBackspace();
+  }
 
+  setupGridListTileLayout() {
+    this.tiles = [
+      { label: CalculatorConstants.BUTTON_CLEAR_ENTRY_LABEL, cols: 1, rows: 1, color: 'warn' },
+      { label: CalculatorConstants.BUTTON_CLEAR_LABEL, cols: 1, rows: 1, color: 'warn' },
+      { label: CalculatorConstants.BUTTON_BACKSPACE_LABEL, cols: 1, rows: 1, color: 'warn' },
+      { label: CalculatorConstants.BUTTON_DIVIDE_LABEL, cols: 1, rows: 1, color: 'accent' },
+      { label: CalculatorConstants.BUTTON_SEVEN_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_EIGHT_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_NINE_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_MULTIPLY_LABEL, cols: 1, rows: 1, color: 'accent' },
+      { label: CalculatorConstants.BUTTON_FOUR_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_FIVE_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_SIX_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_SUBTRACT_LABEL, cols: 1, rows: 1, color: 'accent' },
+      { label: CalculatorConstants.BUTTON_ONE_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_TWO_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_THREE_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_ADD_LABEL, cols: 1, rows: 1, color: 'accent' },
+      { label: CalculatorConstants.BUTTON_PLUS_MINUS_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_ZERO_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_DECIMAL_POINT_LABEL, cols: 1, rows: 1, color: '' },
+      { label: CalculatorConstants.BUTTON_EQUALS_LABEL, cols: 1, rows: 1, color: 'primary' },
+    ];
   }
 
   buttonClick(label: string) {
@@ -149,7 +157,16 @@ export class CalculatorComponent implements OnInit {
 
     const calculation = this.currentTotal + this.currentOperator + this.input;
     console.trace({ calculation });
-    this.currentTotal = eval(calculation);
+
+    // Ask the API to perform the calculation
+    this.calcultorService.calculateString(calculation)
+      .subscribe((data: number) => this.currentTotal = data);
+
+
+    // Siple JS evaluation of an expression
+    // this.currentTotal = eval(calculation);
+
+    // Set the input display to show the current total
     this.inputDisplay = 'currentTotal';
     return this.currentTotal;
   }
