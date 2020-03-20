@@ -3,16 +3,19 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CalculatorComponent } from './calculator/calculator.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialModule } from './material.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CalculatorComponent } from './calculator/calculator.component';
+import { CalculatorService } from './calculator/calculator.service';
+import { BaseUrlInterceptor } from './base-url-interceptor';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CalculatorComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    CalculatorComponent
   ],
   imports: [
     BrowserModule,
@@ -20,9 +23,16 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule
-
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BaseUrlInterceptor,
+      multi: true,
+    },
+    { provide: "BASE_API_URL", useValue: environment.apiUrl },
+    CalculatorService
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
