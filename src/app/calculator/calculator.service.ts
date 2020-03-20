@@ -6,6 +6,6 @@ export class CalculatorService {
   constructor(private http: HttpClient) { }
 
   calculateString(calculationString: string) {
-    return this.http.post<number>('/calculate', calculationString);
+    return this.http.post<number>('calculator', calculationString);
   }
 }
